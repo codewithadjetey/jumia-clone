@@ -16,6 +16,12 @@ use Illuminate\Http\Request;
  *     url=L5_SWAGGER_CONST_HOST,
  *     description="API Server"
  * )
+ * @OA\SecurityScheme(
+ *     securityScheme="sanctum",
+ *     type="http",
+ *     scheme="bearer",
+ *     bearerFormat="JWT"
+ * )
  */
 class SystemController extends Controller
 {

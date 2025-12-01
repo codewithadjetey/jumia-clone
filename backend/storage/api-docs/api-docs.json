@@ -12,6 +12,1277 @@
         }
     ],
     "paths": {
+        "/api/v1/addresses": {
+            "get": {
+                "tags": [
+                    "Addresses"
+                ],
+                "summary": "Get user's addresses",
+                "operationId": "f59ec128002d1f767d5ea0a001040599",
+                "responses": {
+                    "200": {
+                        "description": "List of addresses"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Addresses"
+                ],
+                "summary": "Create new address",
+                "operationId": "5f527985a60b59844fa7882958f607d7",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "type",
+                                    "street",
+                                    "city",
+                                    "state",
+                                    "country",
+                                    "postal_code"
+                                ],
+                                "properties": {
+                                    "type": {
+                                        "type": "string",
+                                        "enum": [
+                                            "shipping",
+                                            "billing"
+                                        ],
+                                        "example": "shipping"
+                                    },
+                                    "street": {
+                                        "type": "string",
+                                        "example": "123 Main St"
+                                    },
+                                    "city": {
+                                        "type": "string",
+                                        "example": "New York"
+                                    },
+                                    "state": {
+                                        "type": "string",
+                                        "example": "NY"
+                                    },
+                                    "country": {
+                                        "type": "string",
+                                        "example": "USA"
+                                    },
+                                    "postal_code": {
+                                        "type": "string",
+                                        "example": "10001"
+                                    },
+                                    "is_default": {
+                                        "type": "boolean",
+                                        "example": false
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Address created successfully"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/addresses/{id}": {
+            "put": {
+                "tags": [
+                    "Addresses"
+                ],
+                "summary": "Update address",
+                "operationId": "101f4beb7785aa47bb3707f7c27c4925",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "type": {
+                                        "type": "string",
+                                        "enum": [
+                                            "shipping",
+                                            "billing"
+                                        ]
+                                    },
+                                    "street": {
+                                        "type": "string"
+                                    },
+                                    "city": {
+                                        "type": "string"
+                                    },
+                                    "state": {
+                                        "type": "string"
+                                    },
+                                    "country": {
+                                        "type": "string"
+                                    },
+                                    "postal_code": {
+                                        "type": "string"
+                                    },
+                                    "is_default": {
+                                        "type": "boolean"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Address updated successfully"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Addresses"
+                ],
+                "summary": "Delete address",
+                "operationId": "857a42b8eb7bf736b8c48d2896f0efbf",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Address deleted successfully"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/addresses/{id}/set-default": {
+            "put": {
+                "tags": [
+                    "Addresses"
+                ],
+                "summary": "Set default address",
+                "operationId": "db395fcc177a02f07b483ce39f209706",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Default address set successfully"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/admin/brands": {
+            "get": {
+                "tags": [
+                    "Admin - Brands"
+                ],
+                "summary": "List all brands (Admin)",
+                "operationId": "32bdc12142dcd208ffa1f52a28bb6da9",
+                "responses": {
+                    "200": {
+                        "description": "List of brands"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Admin - Brands"
+                ],
+                "summary": "Create brand (Admin)",
+                "operationId": "d4503bc9c07021caa82f05fc42aa96ea",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "name"
+                                ],
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "example": "Nike"
+                                    },
+                                    "logo": {
+                                        "type": "string"
+                                    },
+                                    "is_active": {
+                                        "type": "boolean",
+                                        "example": true
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Brand created successfully"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/admin/brands/{id}": {
+            "get": {
+                "tags": [
+                    "Admin - Brands"
+                ],
+                "summary": "Get brand details (Admin)",
+                "operationId": "091c247fc8860b376d3c6cabf1b74629",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Brand details"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            },
+            "put": {
+                "tags": [
+                    "Admin - Brands"
+                ],
+                "summary": "Update brand (Admin)",
+                "operationId": "b125e755a06152757592df17dd7a79c4",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "name": {
+                                        "type": "string"
+                                    },
+                                    "is_active": {
+                                        "type": "boolean"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Brand updated successfully"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Admin - Brands"
+                ],
+                "summary": "Delete brand (Admin)",
+                "operationId": "8fb81cf70913f751d088dddf4e0b1223",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Brand deleted successfully"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/admin/categories": {
+            "get": {
+                "tags": [
+                    "Admin - Categories"
+                ],
+                "summary": "List all categories (Admin)",
+                "operationId": "0a5ce9ac32f2c8c3dedc5e84892bdf42",
+                "responses": {
+                    "200": {
+                        "description": "List of categories"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Admin - Categories"
+                ],
+                "summary": "Create category (Admin)",
+                "operationId": "ab5ff56942d867e660ac42c379acccf9",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "name"
+                                ],
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "example": "Electronics"
+                                    },
+                                    "parent_id": {
+                                        "type": "integer"
+                                    },
+                                    "image": {
+                                        "type": "string"
+                                    },
+                                    "description": {
+                                        "type": "string"
+                                    },
+                                    "is_active": {
+                                        "type": "boolean",
+                                        "example": true
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Category created successfully"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/admin/categories/{id}": {
+            "get": {
+                "tags": [
+                    "Admin - Categories"
+                ],
+                "summary": "Get category details (Admin)",
+                "operationId": "05f7293c77ffb466e08565e8f0dcdbc7",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Category details"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            },
+            "put": {
+                "tags": [
+                    "Admin - Categories"
+                ],
+                "summary": "Update category (Admin)",
+                "operationId": "b4d5592ac05ad18fc9ba8c6309c4ec92",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "name": {
+                                        "type": "string"
+                                    },
+                                    "is_active": {
+                                        "type": "boolean"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Category updated successfully"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Admin - Categories"
+                ],
+                "summary": "Delete category (Admin)",
+                "operationId": "0b16510c2fcf180f72005205d8318f52",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Category deleted successfully"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/admin/coupons": {
+            "get": {
+                "tags": [
+                    "Admin - Coupons"
+                ],
+                "summary": "List all coupons (Admin)",
+                "operationId": "93f1565d8dfeb32026799c663e48e4f6",
+                "responses": {
+                    "200": {
+                        "description": "List of coupons"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Admin - Coupons"
+                ],
+                "summary": "Create coupon (Admin)",
+                "operationId": "00082f84cd15d42f617c57ec817b98b8",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "code",
+                                    "type",
+                                    "value",
+                                    "valid_from",
+                                    "valid_to"
+                                ],
+                                "properties": {
+                                    "code": {
+                                        "type": "string",
+                                        "example": "SAVE10"
+                                    },
+                                    "type": {
+                                        "type": "string",
+                                        "enum": [
+                                            "percentage",
+                                            "fixed"
+                                        ],
+                                        "example": "percentage"
+                                    },
+                                    "value": {
+                                        "type": "number",
+                                        "example": 10
+                                    },
+                                    "min_purchase": {
+                                        "type": "number",
+                                        "example": 100
+                                    },
+                                    "max_discount": {
+                                        "type": "number",
+                                        "example": 50
+                                    },
+                                    "valid_from": {
+                                        "type": "string",
+                                        "format": "date-time"
+                                    },
+                                    "valid_to": {
+                                        "type": "string",
+                                        "format": "date-time"
+                                    },
+                                    "is_active": {
+                                        "type": "boolean",
+                                        "example": true
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Coupon created successfully"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/admin/coupons/{id}": {
+            "get": {
+                "tags": [
+                    "Admin - Coupons"
+                ],
+                "summary": "Get coupon details (Admin)",
+                "operationId": "598e818b0a93b470222a948bab3dcc77",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Coupon details"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            },
+            "put": {
+                "tags": [
+                    "Admin - Coupons"
+                ],
+                "summary": "Update coupon (Admin)",
+                "operationId": "b5001bc6d1afc86d45c09dc4d681cb25",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "code": {
+                                        "type": "string"
+                                    },
+                                    "is_active": {
+                                        "type": "boolean"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Coupon updated successfully"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Admin - Coupons"
+                ],
+                "summary": "Delete coupon (Admin)",
+                "operationId": "9c19139dabf6e860c38d19c3879b3087",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Coupon deleted successfully"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/admin/orders": {
+            "get": {
+                "tags": [
+                    "Admin - Orders"
+                ],
+                "summary": "List all orders (Admin)",
+                "operationId": "5d3d4445b82b0c1e78a9494d4146a376",
+                "responses": {
+                    "200": {
+                        "description": "List of orders"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/admin/orders/{id}": {
+            "get": {
+                "tags": [
+                    "Admin - Orders"
+                ],
+                "summary": "Get order details (Admin)",
+                "operationId": "4fb50d5065b6b7251972d6adbf396e1b",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Order details"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/admin/orders/{id}/status": {
+            "put": {
+                "tags": [
+                    "Admin - Orders"
+                ],
+                "summary": "Update order status (Admin)",
+                "operationId": "afa35d394cd3dd70a1ae95dc03f9fbee",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "status"
+                                ],
+                                "properties": {
+                                    "status": {
+                                        "type": "string",
+                                        "enum": [
+                                            "pending",
+                                            "processing",
+                                            "shipped",
+                                            "delivered",
+                                            "cancelled"
+                                        ],
+                                        "example": "processing"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Order status updated successfully"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/admin/products": {
+            "get": {
+                "tags": [
+                    "Admin - Products"
+                ],
+                "summary": "List all products (Admin)",
+                "operationId": "b692edc1dcbb857b479d82bc88fa0484",
+                "responses": {
+                    "200": {
+                        "description": "List of products"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Admin - Products"
+                ],
+                "summary": "Create product (Admin)",
+                "operationId": "40d234e149d493461a5a45e951c79b61",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "name",
+                                    "sku",
+                                    "price",
+                                    "stock_quantity",
+                                    "category_id"
+                                ],
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "example": "Product Name"
+                                    },
+                                    "sku": {
+                                        "type": "string",
+                                        "example": "SKU123"
+                                    },
+                                    "description": {
+                                        "type": "string"
+                                    },
+                                    "price": {
+                                        "type": "number",
+                                        "example": 99.99
+                                    },
+                                    "sale_price": {
+                                        "type": "number",
+                                        "example": 79.99
+                                    },
+                                    "stock_quantity": {
+                                        "type": "integer",
+                                        "example": 100
+                                    },
+                                    "category_id": {
+                                        "type": "integer",
+                                        "example": 1
+                                    },
+                                    "brand_id": {
+                                        "type": "integer",
+                                        "example": 1
+                                    },
+                                    "is_active": {
+                                        "type": "boolean",
+                                        "example": true
+                                    },
+                                    "featured": {
+                                        "type": "boolean",
+                                        "example": false
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Product created successfully"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/admin/products/{id}": {
+            "get": {
+                "tags": [
+                    "Admin - Products"
+                ],
+                "summary": "Get product details (Admin)",
+                "operationId": "d7f129bdb39c9f84dfb90ec551d8725a",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Product details"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            },
+            "put": {
+                "tags": [
+                    "Admin - Products"
+                ],
+                "summary": "Update product (Admin)",
+                "operationId": "b8ebb5c61e8244be85617aca3d883552",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "name": {
+                                        "type": "string"
+                                    },
+                                    "sku": {
+                                        "type": "string"
+                                    },
+                                    "price": {
+                                        "type": "number"
+                                    },
+                                    "stock_quantity": {
+                                        "type": "integer"
+                                    },
+                                    "is_active": {
+                                        "type": "boolean"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Product updated successfully"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Admin - Products"
+                ],
+                "summary": "Delete product (Admin)",
+                "operationId": "18de8a501b46b3c79ed10eaf0387ee09",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Product deleted successfully"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/admin/reviews": {
+            "get": {
+                "tags": [
+                    "Admin - Reviews"
+                ],
+                "summary": "List all reviews (Admin)",
+                "operationId": "7afe9fddf9cb00d79047fdd1a211126e",
+                "responses": {
+                    "200": {
+                        "description": "List of reviews"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/admin/reviews/{id}/approve": {
+            "put": {
+                "tags": [
+                    "Admin - Reviews"
+                ],
+                "summary": "Approve review (Admin)",
+                "operationId": "33b9c7c50e0e4252c43712ee3e4cd25b",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Review approved successfully"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/admin/reviews/{id}/reject": {
+            "put": {
+                "tags": [
+                    "Admin - Reviews"
+                ],
+                "summary": "Reject review (Admin)",
+                "operationId": "361d9e25c6979d86369063c4e0c1924c",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Review rejected successfully"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/admin/reviews/{id}": {
+            "delete": {
+                "tags": [
+                    "Admin - Reviews"
+                ],
+                "summary": "Delete review (Admin)",
+                "operationId": "201d3bca8655f81347030791a37fee30",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Review deleted successfully"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/admin/users": {
+            "get": {
+                "tags": [
+                    "Admin - Users"
+                ],
+                "summary": "List all users (Admin)",
+                "operationId": "437ceb23d67b89b680b3e7054665aa3a",
+                "responses": {
+                    "200": {
+                        "description": "List of users"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/admin/users/{id}": {
+            "get": {
+                "tags": [
+                    "Admin - Users"
+                ],
+                "summary": "Get user details (Admin)",
+                "operationId": "3a8e270670ad944902de23d87825cc8f",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "User details"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            },
+            "put": {
+                "tags": [
+                    "Admin - Users"
+                ],
+                "summary": "Update user (Admin)",
+                "operationId": "e1bc70f80ef0f652b15327a77fb43069",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "name": {
+                                        "type": "string"
+                                    },
+                                    "email": {
+                                        "type": "string",
+                                        "format": "email"
+                                    },
+                                    "phone": {
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "User updated successfully"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Admin - Users"
+                ],
+                "summary": "Delete user (Admin)",
+                "operationId": "29b8c7b44aba30e142421f4731def390",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "User deleted successfully"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
         "/api/v1/auth/register": {
             "post": {
                 "tags": [
@@ -356,6 +1627,183 @@
                 }
             }
         },
+        "/api/v1/cart": {
+            "get": {
+                "tags": [
+                    "Cart"
+                ],
+                "summary": "Get user's cart",
+                "operationId": "02c46500da46a5cde7742442c4a30e02",
+                "responses": {
+                    "200": {
+                        "description": "Cart items",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "items": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "object"
+                                            }
+                                        },
+                                        "total": {
+                                            "type": "number",
+                                            "example": 150
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/cart/add": {
+            "post": {
+                "tags": [
+                    "Cart"
+                ],
+                "summary": "Add item to cart",
+                "operationId": "3cd9651559b577fbf575e9591e2b0bb6",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "product_id",
+                                    "quantity"
+                                ],
+                                "properties": {
+                                    "product_id": {
+                                        "type": "integer",
+                                        "example": 1
+                                    },
+                                    "quantity": {
+                                        "type": "integer",
+                                        "example": 2
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Item added to cart"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/cart/update/{itemId}": {
+            "put": {
+                "tags": [
+                    "Cart"
+                ],
+                "summary": "Update cart item quantity",
+                "operationId": "52d88795ac46b74a10a35ebc79f34dab",
+                "parameters": [
+                    {
+                        "name": "itemId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "quantity"
+                                ],
+                                "properties": {
+                                    "quantity": {
+                                        "type": "integer",
+                                        "example": 3
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Cart item updated"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/cart/remove/{itemId}": {
+            "delete": {
+                "tags": [
+                    "Cart"
+                ],
+                "summary": "Remove item from cart",
+                "operationId": "0f08481a5fc7cfd9187622b4710ada5a",
+                "parameters": [
+                    {
+                        "name": "itemId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Item removed from cart"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/cart/clear": {
+            "delete": {
+                "tags": [
+                    "Cart"
+                ],
+                "summary": "Clear entire cart",
+                "operationId": "c6f466cf83ff65516489cee38525865d",
+                "responses": {
+                    "200": {
+                        "description": "Cart cleared"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
         "/api/v1/categories": {
             "get": {
                 "tags": [
@@ -392,6 +1840,192 @@
                         "description": "Category details with products"
                     }
                 }
+            }
+        },
+        "/api/v1/coupons/validate": {
+            "post": {
+                "tags": [
+                    "Coupons"
+                ],
+                "summary": "Validate coupon code",
+                "operationId": "1a369aef2c37a2a74210d01f60acf552",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "code",
+                                    "amount"
+                                ],
+                                "properties": {
+                                    "code": {
+                                        "type": "string",
+                                        "example": "SAVE10"
+                                    },
+                                    "amount": {
+                                        "type": "number",
+                                        "example": 100
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Coupon validation result"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/coupons/available": {
+            "get": {
+                "tags": [
+                    "Coupons"
+                ],
+                "summary": "Get available coupons",
+                "operationId": "49db7c3658aa70f6156b4953709160b6",
+                "responses": {
+                    "200": {
+                        "description": "List of available coupons"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/orders": {
+            "get": {
+                "tags": [
+                    "Orders"
+                ],
+                "summary": "Get user's orders",
+                "operationId": "00d3856d2d3d93124e0cc021d0cb5b79",
+                "responses": {
+                    "200": {
+                        "description": "List of orders"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/orders/{id}": {
+            "get": {
+                "tags": [
+                    "Orders"
+                ],
+                "summary": "Get order details",
+                "operationId": "b2f9845bf9fe11158e0e43f1dd0c5802",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Order details"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/orders/create": {
+            "post": {
+                "tags": [
+                    "Orders"
+                ],
+                "summary": "Create new order",
+                "operationId": "2c2bf379b752de04b8f34298bd6ac2b4",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "shipping_address_id",
+                                    "billing_address_id"
+                                ],
+                                "properties": {
+                                    "shipping_address_id": {
+                                        "type": "integer",
+                                        "example": 1
+                                    },
+                                    "billing_address_id": {
+                                        "type": "integer",
+                                        "example": 1
+                                    },
+                                    "payment_method": {
+                                        "type": "string",
+                                        "example": "cash_on_delivery"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Order created successfully"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/orders/{id}/cancel": {
+            "post": {
+                "tags": [
+                    "Orders"
+                ],
+                "summary": "Cancel order",
+                "operationId": "7fb5c5cde4a48c07f8f7551e1abfac97",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Order cancelled successfully"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
             }
         },
         "/api/v1/products": {
@@ -523,6 +2157,155 @@
                 }
             }
         },
+        "/api/v1/reviews/product/{productId}": {
+            "get": {
+                "tags": [
+                    "Reviews"
+                ],
+                "summary": "Get product reviews",
+                "operationId": "a094982dbf41b34216b2285fb7263c51",
+                "parameters": [
+                    {
+                        "name": "productId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "List of product reviews"
+                    }
+                }
+            }
+        },
+        "/api/v1/reviews": {
+            "post": {
+                "tags": [
+                    "Reviews"
+                ],
+                "summary": "Create review",
+                "operationId": "20f4daafc07903e8535348e0047f7920",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "product_id",
+                                    "rating"
+                                ],
+                                "properties": {
+                                    "product_id": {
+                                        "type": "integer",
+                                        "example": 1
+                                    },
+                                    "rating": {
+                                        "type": "integer",
+                                        "maximum": 5,
+                                        "minimum": 1,
+                                        "example": 5
+                                    },
+                                    "comment": {
+                                        "type": "string",
+                                        "example": "Great product!"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Review created successfully"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/reviews/{id}": {
+            "put": {
+                "tags": [
+                    "Reviews"
+                ],
+                "summary": "Update review",
+                "operationId": "64b4b952592ebe8e0b00204e76bd991c",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "rating": {
+                                        "type": "integer",
+                                        "maximum": 5,
+                                        "minimum": 1
+                                    },
+                                    "comment": {
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Review updated successfully"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Reviews"
+                ],
+                "summary": "Delete review",
+                "operationId": "205dc23d44b18ca0b5c26a293cc69cf7",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Review deleted successfully"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
         "/api/v1/health": {
             "get": {
                 "tags": [
@@ -601,9 +2384,136 @@
                     }
                 }
             }
+        },
+        "/api/v1/wishlist": {
+            "get": {
+                "tags": [
+                    "Wishlist"
+                ],
+                "summary": "Get user's wishlist",
+                "operationId": "6acbacf1a11098144cb0d316fb2eea4b",
+                "responses": {
+                    "200": {
+                        "description": "List of wishlist items"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/wishlist/add": {
+            "post": {
+                "tags": [
+                    "Wishlist"
+                ],
+                "summary": "Add to wishlist",
+                "operationId": "218cca8d21f430c80e8f0ef67eb85afb",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "product_id"
+                                ],
+                                "properties": {
+                                    "product_id": {
+                                        "type": "integer",
+                                        "example": 1
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Item added to wishlist"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/wishlist/remove/{productId}": {
+            "delete": {
+                "tags": [
+                    "Wishlist"
+                ],
+                "summary": "Remove from wishlist",
+                "operationId": "f46b92375f8b64a1bb02abbd7c561fcc",
+                "parameters": [
+                    {
+                        "name": "productId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Item removed from wishlist"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        }
+    },
+    "components": {
+        "securitySchemes": {
+            "sanctum": {
+                "type": "http",
+                "bearerFormat": "JWT",
+                "scheme": "bearer"
+            }
         }
     },
     "tags": [
+        {
+            "name": "Addresses",
+            "description": "Address management endpoints"
+        },
+        {
+            "name": "Admin - Brands",
+            "description": "Admin brand management endpoints"
+        },
+        {
+            "name": "Admin - Categories",
+            "description": "Admin category management endpoints"
+        },
+        {
+            "name": "Admin - Coupons",
+            "description": "Admin coupon management endpoints"
+        },
+        {
+            "name": "Admin - Orders",
+            "description": "Admin order management endpoints"
+        },
+        {
+            "name": "Admin - Products",
+            "description": "Admin product management endpoints"
+        },
+        {
+            "name": "Admin - Reviews",
+            "description": "Admin review moderation endpoints"
+        },
+        {
+            "name": "Admin - Users",
+            "description": "Admin user management endpoints"
+        },
         {
             "name": "Authentication",
             "description": "User authentication endpoints"
@@ -613,12 +2523,32 @@
             "description": "Brand endpoints"
         },
         {
+            "name": "Cart",
+            "description": "Shopping cart endpoints"
+        },
+        {
             "name": "Categories",
             "description": "Category endpoints"
         },
         {
+            "name": "Coupons",
+            "description": "Coupon management endpoints"
+        },
+        {
+            "name": "Orders",
+            "description": "Order management endpoints"
+        },
+        {
             "name": "Products",
             "description": "Product endpoints"
+        },
+        {
+            "name": "Reviews",
+            "description": "Product review endpoints"
+        },
+        {
+            "name": "Wishlist",
+            "description": "Wishlist management endpoints"
         },
         {
             "name": "System",
