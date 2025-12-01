@@ -49,6 +49,7 @@ const Topbar = ({ onMenuToggle }) => {
             <Link
               to="/account"
               className="hidden md:flex flex-col items-center text-sm hover:text-jumia-orange transition"
+              title="My Account"
             >
               <svg
                 className="w-5 h-5 mb-1"
