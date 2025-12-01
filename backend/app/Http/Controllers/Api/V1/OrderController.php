@@ -19,7 +19,7 @@ class OrderController extends Controller
             ->latest()
             ->paginate(20);
 
-        return response()->json($orders);
+        return OrderResource::collection($orders)->response();
     }
 
     public function show(Request $request, $id): JsonResponse
@@ -28,16 +28,12 @@ class OrderController extends Controller
             ->where('user_id', $request->user()->id)
             ->findOrFail($id);
 
-        return response()->json($order);
+        return response()->json(new OrderResource($order));
     }
 
-    public function create(Request $request): JsonResponse
+    public function create(CreateOrderRequest $request): JsonResponse
     {
-        $validated = $request->validate([
-            'shipping_address_id' => 'required|exists:addresses,id',
-            'billing_address_id' => 'required|exists:addresses,id',
-            'payment_method' => 'nullable|string',
-        ]);
+        $validated = $request->validated();
 
         $cartItems = CartItem::with('product')
             ->where('user_id', $request->user()->id)
@@ -78,7 +74,7 @@ class OrderController extends Controller
 
         CartItem::where('user_id', $request->user()->id)->delete();
 
-        return response()->json($order->load(['items.product', 'shippingAddress', 'billingAddress']), 201);
+        return response()->json(new OrderResource($order->load(['items.product', 'shippingAddress', 'billingAddress'])), 201);
     }
 
     public function cancel(Request $request, $id): JsonResponse

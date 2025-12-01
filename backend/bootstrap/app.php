@@ -28,7 +28,12 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->api(prepend: [
             \App\Http\Middleware\ApiVersion::class,
         ]);
+
+        // Rate limiting for API - 60 requests per minute
+        $middleware->throttleApi('60,1');
     })
     ->withExceptions(function (Exceptions $exceptions): void {
-        //
+        $exceptions->shouldRenderJsonWhen(function ($request, Throwable $e) {
+            return $request->expectsJson() || $request->is('api/*');
+        });
     })->create();

@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Api\V1\AddToCartRequest;
+use App\Http\Resources\Api\V1\CartItemResource;
 use App\Models\CartItem;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -24,17 +26,14 @@ class CartController extends Controller
         $total = $cartItems->sum('total');
 
         return response()->json([
-            'items' => $cartItems,
+            'items' => CartItemResource::collection($cartItems),
             'total' => $total,
         ]);
     }
 
-    public function add(Request $request): JsonResponse
+    public function add(AddToCartRequest $request): JsonResponse
     {
-        $validated = $request->validate([
-            'product_id' => 'required|exists:products,id',
-            'quantity' => 'required|integer|min:1',
-        ]);
+        $validated = $request->validated();
 
         $cartItem = CartItem::updateOrCreate(
             [
@@ -44,7 +43,7 @@ class CartController extends Controller
             ['quantity' => $validated['quantity']]
         );
 
-        return response()->json($cartItem->load('product'), 201);
+        return response()->json(new CartItemResource($cartItem->load('product')), 201);
     }
 
     public function update(Request $request, $itemId): JsonResponse
@@ -58,7 +57,7 @@ class CartController extends Controller
 
         $cartItem->update(['quantity' => $validated['quantity']]);
 
-        return response()->json($cartItem->load('product'));
+        return response()->json(new CartItemResource($cartItem->load('product')));
     }
 
     public function remove(Request $request, $itemId): JsonResponse

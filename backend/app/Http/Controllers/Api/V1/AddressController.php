@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Api\V1\CreateAddressRequest;
 use App\Models\Address;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -16,17 +17,9 @@ class AddressController extends Controller
         return response()->json($addresses);
     }
 
-    public function store(Request $request): JsonResponse
+    public function store(CreateAddressRequest $request): JsonResponse
     {
-        $validated = $request->validate([
-            'type' => 'required|in:shipping,billing',
-            'street' => 'required|string',
-            'city' => 'required|string',
-            'state' => 'required|string',
-            'country' => 'required|string',
-            'postal_code' => 'required|string',
-            'is_default' => 'boolean',
-        ]);
+        $validated = $request->validated();
 
         if ($validated['is_default'] ?? false) {
             Address::where('user_id', $request->user()->id)

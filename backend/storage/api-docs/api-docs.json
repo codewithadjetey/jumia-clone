@@ -7,7 +7,7 @@
     },
     "servers": [
         {
-            "url": "http://my-default-host.com",
+            "url": "http://codewithadjetey.jumia",
             "description": "API Server"
         }
     ],

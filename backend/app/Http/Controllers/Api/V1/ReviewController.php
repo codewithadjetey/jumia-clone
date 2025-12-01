@@ -20,13 +20,9 @@ class ReviewController extends Controller
         return response()->json($reviews);
     }
 
-    public function store(Request $request): JsonResponse
+    public function store(CreateReviewRequest $request): JsonResponse
     {
-        $validated = $request->validate([
-            'product_id' => 'required|exists:products,id',
-            'rating' => 'required|integer|min:1|max:5',
-            'comment' => 'nullable|string',
-        ]);
+        $validated = $request->validated();
 
         $review = Review::create([
             'user_id' => $request->user()->id,
