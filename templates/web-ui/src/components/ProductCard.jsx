@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 const ProductCard = ({ product, showBuyNow = false }) => {
   const {
@@ -18,9 +19,11 @@ const ProductCard = ({ product, showBuyNow = false }) => {
   return (
     <div className="product-card bg-white rounded-lg shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden group min-w-[150px] md:min-w-0">
       <div className="relative">
-        <div className="aspect-square bg-jumia-light-gray overflow-hidden">
-          <div className="skeleton w-full h-full group-hover:scale-110 transition-transform duration-300"></div>
-        </div>
+        <Link to={`/product/${id}`}>
+          <div className="aspect-square bg-jumia-light-gray overflow-hidden cursor-pointer">
+            <div className="skeleton w-full h-full group-hover:scale-110 transition-transform duration-300"></div>
+          </div>
+        </Link>
         {discount && (
           <span className="absolute top-2 left-2 bg-jumia-red text-white text-xs font-bold px-2 py-1 rounded-full">
             -{discount}%
@@ -48,7 +51,9 @@ const ProductCard = ({ product, showBuyNow = false }) => {
         </button>
       </div>
       <div className="p-3 md:p-4">
-        <h3 className="text-sm font-medium text-gray-800 mb-2 line-clamp-2">{name}</h3>
+        <Link to={`/product/${id}`}>
+          <h3 className="text-sm font-medium text-gray-800 mb-2 line-clamp-2 hover:text-jumia-orange transition cursor-pointer">{name}</h3>
+        </Link>
         <div className="flex items-center space-x-1 mb-2">
           <span className="text-xs text-jumia-orange">
             {'★'.repeat(Math.floor(rating))}
