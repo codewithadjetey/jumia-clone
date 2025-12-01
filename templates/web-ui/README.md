@@ -1,10 +1,10 @@
-# Jumia React Template
+# Jumbo React Template
 
-A complete, responsive e-commerce template built with React and Tailwind CSS, replicating Jumia's design and functionality.
+A complete, responsive e-commerce template built with React and Tailwind CSS, replicating Jumbo's design and functionality.
 
 ## Features
 
-- 🎨 **Jumia Design System** - Exact color scheme and branding
+- 🎨 **Jumbo Design System** - Exact color scheme and branding
 - 📱 **Fully Responsive** - Mobile-first approach with breakpoints
 - ⚡ **React Components** - Modular, reusable component architecture
 - 🛒 **Shopping Cart** - Full cart functionality with quantity management
@@ -132,7 +132,7 @@ npm run preview
 
 ### Footer
 - Multi-column layout
-- About Jumia links
+- About Jumbo links
 - Customer service links
 - Payment methods
 - Social media icons

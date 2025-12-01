@@ -1,7 +1,7 @@
 {
-  "name": "jumia-react-template",
+  "name": "jumbo-react-template",
   "version": "1.0.0",
-  "description": "Jumia e-commerce template built with React and Tailwind CSS",
+  "description": "Jumbo e-commerce template built with React and Tailwind CSS",
   "type": "module",
   "scripts": {
     "dev": "vite",

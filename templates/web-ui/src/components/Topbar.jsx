@@ -17,7 +17,7 @@ const Topbar = ({ onMenuToggle }) => {
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h16"></path>
               </svg>
             </button>
-            <Link to="/" className="text-2xl font-bold text-jumia-orange">Jumia</Link>
+            <Link to="/" className="text-2xl font-bold text-jumia-orange">Jumbo</Link>
           </div>
 
           {/* Search Bar - Desktop */}

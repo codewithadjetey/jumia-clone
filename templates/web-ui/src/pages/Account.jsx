@@ -41,7 +41,7 @@ const Account = () => {
                   />
                 </svg>
               </div>
-              <h1 className="text-3xl font-bold text-gray-900 mb-2">Welcome to Jumia</h1>
+              <h1 className="text-3xl font-bold text-gray-900 mb-2">Welcome to Jumbo</h1>
               <p className="text-jumia-gray">
                 Sign in to your account or create a new one to get started
               </p>

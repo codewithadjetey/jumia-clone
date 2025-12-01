@@ -5,9 +5,9 @@ const Footer = () => {
     <footer className="bg-jumia-dark text-white py-12">
       <div className="container mx-auto px-4">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-8">
-          {/* About Jumia */}
+          {/* About Jumbo */}
           <div>
-            <h3 className="text-lg font-bold mb-4 text-jumia-orange">About Jumia</h3>
+            <h3 className="text-lg font-bold mb-4 text-jumia-orange">About Jumbo</h3>
             <ul className="space-y-2 text-sm text-gray-300">
               <li>
                 <a href="/about" className="hover:text-jumia-orange transition">
@@ -20,8 +20,8 @@ const Footer = () => {
                 </a>
               </li>
               <li>
-                <a href="/jumia-express" className="hover:text-jumia-orange transition">
-                  Jumia Express
+                <a href="/jumbo-express" className="hover:text-jumia-orange transition">
+                  Jumbo Express
                 </a>
               </li>
               <li>
@@ -122,7 +122,7 @@ const Footer = () => {
 
         <div className="border-t border-gray-700 pt-8">
           <div className="flex flex-col md:flex-row justify-between items-center">
-            <p className="text-sm text-gray-400 mb-4 md:mb-0">© 2024 Jumia. All rights reserved.</p>
+            <p className="text-sm text-gray-400 mb-4 md:mb-0">© 2024 Jumbo. All rights reserved.</p>
             <div className="flex space-x-4 text-sm text-gray-400">
               <a href="/terms" className="hover:text-jumia-orange transition">
                 Terms
