@@ -11,6 +11,12 @@ import ForgotPassword from './pages/ForgotPassword';
 import ResetPassword from './pages/ResetPassword';
 import Account from './pages/Account';
 import ProductDetail from './pages/ProductDetail';
+import Categories from './pages/Categories';
+import NotFound from './pages/NotFound';
+import Error from './pages/Error';
+import FAQ from './pages/FAQ';
+import TrackOrder from './pages/TrackOrder';
+import Contact from './pages/Contact';
 import Cart from './components/Cart';
 import Checkout from './components/Checkout';
 
@@ -32,15 +38,20 @@ function AppContent() {
       )}
       <main className="flex-grow">
         <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />} />
-          <Route path="/forgot-password" element={<ForgotPassword />} />
-          <Route path="/reset-password" element={<ResetPassword />} />
-          <Route path="/account" element={<Account />} />
-          <Route path="/product/:id" element={<ProductDetail />} />
-          <Route path="/cart" element={<Cart />} />
-          <Route path="/checkout" element={<Checkout />} />
+          <Route path="/" element={<Home />} errorElement={<Error />} />
+          <Route path="/login" element={<Login />} errorElement={<Error />} />
+          <Route path="/register" element={<Register />} errorElement={<Error />} />
+          <Route path="/forgot-password" element={<ForgotPassword />} errorElement={<Error />} />
+          <Route path="/reset-password" element={<ResetPassword />} errorElement={<Error />} />
+          <Route path="/account" element={<Account />} errorElement={<Error />} />
+          <Route path="/product/:id" element={<ProductDetail />} errorElement={<Error />} />
+          <Route path="/categories" element={<Categories />} errorElement={<Error />} />
+          <Route path="/faq" element={<FAQ />} errorElement={<Error />} />
+          <Route path="/track-order" element={<TrackOrder />} errorElement={<Error />} />
+          <Route path="/contact" element={<Contact />} errorElement={<Error />} />
+          <Route path="/cart" element={<Cart />} errorElement={<Error />} />
+          <Route path="/checkout" element={<Checkout />} errorElement={<Error />} />
+          <Route path="*" element={<NotFound />} />
         </Routes>
       </main>
       {!isAuthPage && (

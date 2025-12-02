@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 const Footer = () => {
   return (
@@ -10,29 +11,29 @@ const Footer = () => {
             <h3 className="text-lg font-bold mb-4 text-jumia-orange">About Jumbo</h3>
             <ul className="space-y-2 text-sm text-gray-300">
               <li>
-                <a href="/about" className="hover:text-jumia-orange transition">
+                <Link to="/about" className="hover:text-jumia-orange transition">
                   About Us
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="/careers" className="hover:text-jumia-orange transition">
+                <Link to="/careers" className="hover:text-jumia-orange transition">
                   Careers
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="/jumbo-express" className="hover:text-jumia-orange transition">
+                <Link to="/jumbo-express" className="hover:text-jumia-orange transition">
                   Jumbo Express
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="/terms" className="hover:text-jumia-orange transition">
+                <Link to="/terms" className="hover:text-jumia-orange transition">
                   Terms & Conditions
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="/privacy" className="hover:text-jumia-orange transition">
+                <Link to="/privacy" className="hover:text-jumia-orange transition">
                   Privacy Policy
-                </a>
+                </Link>
               </li>
             </ul>
           </div>
@@ -42,29 +43,29 @@ const Footer = () => {
             <h3 className="text-lg font-bold mb-4 text-jumia-orange">Customer Service</h3>
             <ul className="space-y-2 text-sm text-gray-300">
               <li>
-                <a href="/contact" className="hover:text-jumia-orange transition">
+                <Link to="/contact" className="hover:text-jumia-orange transition">
                   Contact Us
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="/faq" className="hover:text-jumia-orange transition">
+                <Link to="/faq" className="hover:text-jumia-orange transition">
                   FAQs
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="/delivery" className="hover:text-jumia-orange transition">
+                <Link to="/delivery" className="hover:text-jumia-orange transition">
                   Delivery Information
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="/returns" className="hover:text-jumia-orange transition">
+                <Link to="/returns" className="hover:text-jumia-orange transition">
                   Returns & Refunds
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="/track-order" className="hover:text-jumia-orange transition">
+                <Link to="/track-order" className="hover:text-jumia-orange transition">
                   Track Your Order
-                </a>
+                </Link>
               </li>
             </ul>
           </div>
