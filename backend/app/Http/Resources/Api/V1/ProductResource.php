@@ -17,10 +17,16 @@ class ProductResource extends JsonResource
             'description' => $this->description,
             'price' => (float) $this->price,
             'sale_price' => $this->sale_price ? (float) $this->sale_price : null,
+            'flash_sale_price' => $this->flash_sale_price ? (float) $this->flash_sale_price : null,
+            'flash_sale_start' => $this->flash_sale_start?->toIso8601String(),
+            'flash_sale_end' => $this->flash_sale_end?->toIso8601String(),
             'current_price' => (float) $this->current_price,
             'stock_quantity' => $this->stock_quantity,
             'is_active' => $this->is_active,
             'featured' => $this->featured,
+            'average_rating' => $this->average_rating ? (float) $this->average_rating : 0,
+            'review_count' => $this->review_count ?? 0,
+            'discount_percentage' => $this->discount_percentage,
             'category' => $this->whenLoaded('category', function () {
                 return new CategoryResource($this->category);
             }),
