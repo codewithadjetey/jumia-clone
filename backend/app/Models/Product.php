@@ -20,13 +20,22 @@ class Product extends Model
         'brand_id',
         'is_active',
         'featured',
+        'flash_sale_start',
+        'flash_sale_end',
+        'flash_sale_price',
+        'average_rating',
+        'review_count',
     ];
 
     protected $casts = [
         'price' => 'decimal:2',
         'sale_price' => 'decimal:2',
+        'flash_sale_price' => 'decimal:2',
+        'average_rating' => 'decimal:2',
         'is_active' => 'boolean',
         'featured' => 'boolean',
+        'flash_sale_start' => 'datetime',
+        'flash_sale_end' => 'datetime',
     ];
 
     public function category(): BelongsTo
@@ -64,8 +73,30 @@ class Product extends Model
         return $this->hasMany(Wishlist::class);
     }
 
+    public function recentlyViewed(): HasMany
+    {
+        return $this->hasMany(RecentlyViewed::class);
+    }
+
     public function getCurrentPriceAttribute()
     {
+        // Check if flash sale is active
+        if ($this->flash_sale_price && $this->flash_sale_start && $this->flash_sale_end) {
+            $now = now();
+            if ($now >= $this->flash_sale_start && $now <= $this->flash_sale_end) {
+                return $this->flash_sale_price;
+            }
+        }
         return $this->sale_price ?? $this->price;
+    }
+
+    public function getDiscountPercentageAttribute()
+    {
+        if ($this->sale_price || $this->flash_sale_price) {
+            $originalPrice = $this->price;
+            $currentPrice = $this->current_price;
+            return round((($originalPrice - $currentPrice) / $originalPrice) * 100);
+        }
+        return 0;
     }
 }
