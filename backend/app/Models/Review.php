@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Review extends Model
 {
@@ -11,8 +12,10 @@ class Review extends Model
         'user_id',
         'product_id',
         'rating',
+        'title',
         'comment',
         'is_approved',
+        'helpful_count',
     ];
 
     protected $casts = [
@@ -27,5 +30,10 @@ class Review extends Model
     public function product(): BelongsTo
     {
         return $this->belongsTo(Product::class);
+    }
+
+    public function helpfulVotes(): HasMany
+    {
+        return $this->hasMany(ReviewHelpfulVote::class);
     }
 }
