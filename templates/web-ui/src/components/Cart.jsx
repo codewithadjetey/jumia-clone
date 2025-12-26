@@ -1,7 +1,11 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
+import { useToast } from '../context/ToastContext';
 
 const Cart = () => {
+  const { showToast } = useToast();
+  const [couponCode, setCouponCode] = useState('');
+  const [appliedCoupon, setAppliedCoupon] = useState(null);
   const [cartItems, setCartItems] = useState([
     {
       id: 1,
@@ -35,9 +39,37 @@ const Cart = () => {
     setCartItems((items) => items.filter((item) => item.id !== id));
   };
 
+  const handleApplyCoupon = (e) => {
+    e.preventDefault();
+    // TODO: Replace with actual API call
+    const validCoupons = {
+      SAVE20: { discount: 20, minOrder: 10000 },
+      SAVE10: { discount: 10, minOrder: 5000 },
+    };
+
+    const coupon = validCoupons[couponCode.toUpperCase()];
+    const subtotal = cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
+
+    if (coupon && subtotal >= coupon.minOrder) {
+      setAppliedCoupon({ code: couponCode.toUpperCase(), ...coupon });
+      showToast('Coupon applied successfully!', 'success');
+    } else {
+      showToast('Invalid coupon code or minimum order not met', 'error');
+    }
+  };
+
+  const handleRemoveCoupon = () => {
+    setAppliedCoupon(null);
+    setCouponCode('');
+    showToast('Coupon removed', 'info');
+  };
+
   const subtotal = cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
+  const discount = appliedCoupon
+    ? Math.round((subtotal * appliedCoupon.discount) / 100)
+    : 0;
   const deliveryFee = subtotal > 5000 ? 0 : 500;
-  const total = subtotal + deliveryFee;
+  const total = subtotal - discount + deliveryFee;
 
   return (
     <div className="min-h-screen bg-jumia-light-gray py-8">
@@ -133,11 +165,54 @@ const Cart = () => {
             <div className="lg:col-span-1">
               <div className="bg-white rounded-lg p-6 shadow-md sticky top-20">
                 <h2 className="text-xl font-bold text-gray-800 mb-4">Order Summary</h2>
+                
+                {/* Coupon Code */}
+                <div className="mb-4 pb-4 border-b">
+                  {appliedCoupon ? (
+                    <div className="flex items-center justify-between bg-jumia-green bg-opacity-10 p-3 rounded-lg">
+                      <div>
+                        <p className="text-sm font-medium text-jumia-green">{appliedCoupon.code}</p>
+                        <p className="text-xs text-jumia-gray">{appliedCoupon.discount}% off</p>
+                      </div>
+                      <button
+                        onClick={handleRemoveCoupon}
+                        className="text-red-500 hover:text-red-700"
+                      >
+                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                      </button>
+                    </div>
+                  ) : (
+                    <form onSubmit={handleApplyCoupon} className="flex gap-2">
+                      <input
+                        type="text"
+                        value={couponCode}
+                        onChange={(e) => setCouponCode(e.target.value)}
+                        placeholder="Coupon code"
+                        className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-jumia-orange text-sm"
+                      />
+                      <button
+                        type="submit"
+                        className="px-4 py-2 bg-jumia-orange text-white rounded-lg hover:bg-jumia-orange-dark transition text-sm font-medium"
+                      >
+                        Apply
+                      </button>
+                    </form>
+                  )}
+                </div>
+
                 <div className="space-y-3 mb-4">
                   <div className="flex justify-between text-gray-600">
                     <span>Subtotal</span>
                     <span>₵{subtotal.toLocaleString()}</span>
                   </div>
+                  {discount > 0 && (
+                    <div className="flex justify-between text-jumia-green">
+                      <span>Discount</span>
+                      <span>-₵{discount.toLocaleString()}</span>
+                    </div>
+                  )}
                   <div className="flex justify-between text-gray-600">
                     <span>Delivery Fee</span>
                     <span>{deliveryFee === 0 ? <span className="text-jumia-green">Free</span> : `₵${deliveryFee.toLocaleString()}`}</span>

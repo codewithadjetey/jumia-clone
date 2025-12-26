@@ -1,7 +1,41 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import SearchAutocomplete from './SearchAutocomplete';
 
 const Topbar = ({ onMenuToggle }) => {
+  const [searchQuery, setSearchQuery] = useState('');
+  const [suggestions, setSuggestions] = useState([]);
+  const navigate = useNavigate();
+
+  const handleSearchChange = (e) => {
+    const query = e.target.value;
+    setSearchQuery(query);
+    
+    // TODO: Replace with actual API call for suggestions
+    if (query.length > 2) {
+      const mockSuggestions = [
+        { id: 1, name: 'Samsung Galaxy S21', price: 285000 },
+        { id: 2, name: 'iPhone 13 Pro', price: 320000 },
+      ];
+      setSuggestions(mockSuggestions);
+    } else {
+      setSuggestions([]);
+    }
+  };
+
+  const handleSearchSubmit = (e) => {
+    e.preventDefault();
+    if (searchQuery.trim()) {
+      navigate(`/search?q=${encodeURIComponent(searchQuery)}`);
+    }
+  };
+
+  const handleSearch = (query) => {
+    navigate(`/search?q=${encodeURIComponent(query)}`);
+    setSearchQuery('');
+    setSuggestions([]);
+  };
+
   return (
     <header className="sticky top-0 z-50 bg-black text-white shadow-lg">
       <div className="container mx-auto px-4">
@@ -22,9 +56,11 @@ const Topbar = ({ onMenuToggle }) => {
 
           {/* Search Bar - Desktop */}
           <div className="hidden md:flex flex-1 max-w-2xl mx-8">
-            <div className="relative w-full">
+            <form onSubmit={handleSearchSubmit} className="relative w-full">
               <input
                 type="text"
+                value={searchQuery}
+                onChange={handleSearchChange}
                 placeholder="Search products, brands and categories"
                 className="w-full px-4 py-2 pl-10 pr-4 rounded-full text-gray-800 focus:outline-none focus:ring-2 focus:ring-jumia-orange"
               />
@@ -41,7 +77,12 @@ const Topbar = ({ onMenuToggle }) => {
                   d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
                 />
               </svg>
-            </div>
+              <SearchAutocomplete
+                searchQuery={searchQuery}
+                suggestions={suggestions}
+                onSearch={handleSearch}
+              />
+            </form>
           </div>
 
           {/* Right Menu */}
@@ -113,9 +154,11 @@ const Topbar = ({ onMenuToggle }) => {
 
       {/* Mobile Search */}
       <div className="md:hidden px-4 pb-4">
-        <div className="relative">
+        <form onSubmit={handleSearchSubmit} className="relative">
           <input
             type="text"
+            value={searchQuery}
+            onChange={handleSearchChange}
             placeholder="Search products, brands and categories"
             className="w-full px-4 py-2 pl-10 pr-4 rounded-full text-gray-800 focus:outline-none focus:ring-2 focus:ring-jumia-orange"
           />
@@ -132,7 +175,12 @@ const Topbar = ({ onMenuToggle }) => {
               d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
             />
           </svg>
-        </div>
+          <SearchAutocomplete
+            searchQuery={searchQuery}
+            suggestions={suggestions}
+            onSearch={handleSearch}
+          />
+        </form>
       </div>
     </header>
   );

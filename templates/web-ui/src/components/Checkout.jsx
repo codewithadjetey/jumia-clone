@@ -12,6 +12,8 @@ const Checkout = () => {
     state: '',
     zipCode: '',
     paymentMethod: 'card',
+    deliverySlot: '',
+    orderNotes: '',
   });
 
   const handleChange = (e) => {
@@ -152,6 +154,39 @@ const Checkout = () => {
                       className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-jumia-orange"
                     />
                   </div>
+                </div>
+
+                {/* Delivery Time Slot */}
+                <div className="border-t pt-4 mt-4">
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Preferred Delivery Time
+                  </label>
+                  <select
+                    name="deliverySlot"
+                    value={formData.deliverySlot}
+                    onChange={handleChange}
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-jumia-orange"
+                  >
+                    <option value="">Select a time slot</option>
+                    <option value="morning">Morning (9 AM - 12 PM)</option>
+                    <option value="afternoon">Afternoon (12 PM - 4 PM)</option>
+                    <option value="evening">Evening (4 PM - 8 PM)</option>
+                  </select>
+                </div>
+
+                {/* Order Notes */}
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Order Notes (Optional)
+                  </label>
+                  <textarea
+                    name="orderNotes"
+                    value={formData.orderNotes}
+                    onChange={handleChange}
+                    rows="3"
+                    placeholder="Any special instructions for delivery..."
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-jumia-orange"
+                  />
                 </div>
 
                 {/* Payment Method */}

@@ -1,13 +1,28 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useParams, useNavigate } from 'react-router-dom';
+import { useRecentlyViewed } from '../context/RecentlyViewedContext';
 import ProductCard from '../components/ProductCard';
+import ImageGallery from '../components/ImageGallery';
+import ReviewForm from '../components/ReviewForm';
+import ReviewList from '../components/ReviewList';
+import Breadcrumbs from '../components/Breadcrumbs';
 
 const ProductDetail = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-  const [selectedImage, setSelectedImage] = useState(0);
+  const { addToRecentlyViewed } = useRecentlyViewed();
   const [quantity, setQuantity] = useState(1);
   const [isWishlisted, setIsWishlisted] = useState(false);
+  const [reviews, setReviews] = useState([
+    {
+      name: 'John Doe',
+      rating: 5,
+      title: 'Excellent product!',
+      comment: 'Excellent phone! The camera quality is outstanding and the battery lasts all day. Highly recommend!',
+      date: new Date().toISOString(),
+      helpful: 12,
+    },
+  ]);
 
   // TODO: Replace with actual API call to fetch product by ID
   const product = {
@@ -60,6 +75,11 @@ Key Features:
     category: 'Electronics',
     subcategory: 'Smartphones',
   };
+
+  useEffect(() => {
+    // Add to recently viewed when product loads
+    addToRecentlyViewed(product);
+  }, [id, addToRecentlyViewed]);
 
   const relatedProducts = [
     {
@@ -130,98 +150,26 @@ Key Features:
     }
   };
 
+  const handleReviewSubmit = (reviewData) => {
+    setReviews([...reviews, { ...reviewData, date: new Date().toISOString(), helpful: 0 }]);
+  };
+
   return (
     <div className="min-h-screen bg-jumia-light-gray py-8">
       <div className="container mx-auto px-4">
-        {/* Breadcrumb */}
-        <nav className="mb-6">
-          <ol className="flex items-center space-x-2 text-sm text-jumia-gray">
-            <li>
-              <Link to="/" className="hover:text-jumia-orange">
-                Home
-              </Link>
-            </li>
-            <li>/</li>
-            <li>
-              <Link to={`/category/${product.category.toLowerCase()}`} className="hover:text-jumia-orange">
-                {product.category}
-              </Link>
-            </li>
-            <li>/</li>
-            <li>
-              <Link to={`/category/${product.subcategory.toLowerCase()}`} className="hover:text-jumia-orange">
-                {product.subcategory}
-              </Link>
-            </li>
-            <li>/</li>
-            <li className="text-gray-900">{product.name}</li>
-          </ol>
-        </nav>
+        <Breadcrumbs
+          items={[
+            { label: 'Home', path: '/' },
+            { label: product.category, path: `/category/${product.category.toLowerCase()}` },
+            { label: product.subcategory, path: `/category/${product.subcategory.toLowerCase()}` },
+            { label: product.name, path: `/product/${product.id}` },
+          ]}
+        />
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
           {/* Product Images */}
           <div className="bg-white rounded-lg shadow-md p-4">
-            <div className="aspect-square bg-jumia-light-gray rounded-lg mb-4 overflow-hidden relative">
-              <div className="skeleton w-full h-full"></div>
-              {/* Main Image */}
-              <div className="absolute inset-0 flex items-center justify-center">
-                <span className="text-gray-400">Product Image {selectedImage + 1}</span>
-              </div>
-              
-              {/* Badges */}
-              <div className="absolute top-4 left-4 flex flex-col gap-2">
-                {product.badges.map((badge, index) => (
-                  <span
-                    key={index}
-                    className={`${
-                      badge.type === 'express' || badge.type === 'free-delivery'
-                        ? 'bg-jumia-green'
-                        : badge.type === 'official'
-                        ? 'bg-blue-500'
-                        : 'bg-jumia-red'
-                    } text-white text-xs font-bold px-2 py-1 rounded`}
-                  >
-                    {badge.text}
-                  </span>
-                ))}
-                {product.discount && (
-                  <span className="bg-jumia-red text-white text-xs font-bold px-2 py-1 rounded-full">
-                    -{product.discount}%
-                  </span>
-                )}
-              </div>
-
-              {/* Wishlist Button */}
-              <button
-                onClick={() => setIsWishlisted(!isWishlisted)}
-                className={`absolute top-4 right-4 p-2 rounded-full shadow-md transition ${
-                  isWishlisted
-                    ? 'bg-jumia-orange text-white'
-                    : 'bg-white text-gray-600 hover:bg-jumia-orange hover:text-white'
-                }`}
-              >
-                <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
-                </svg>
-              </button>
-            </div>
-
-            {/* Thumbnail Gallery */}
-            <div className="grid grid-cols-4 gap-2">
-              {product.images.map((image, index) => (
-                <button
-                  key={index}
-                  onClick={() => setSelectedImage(index)}
-                  className={`aspect-square bg-jumia-light-gray rounded-lg overflow-hidden border-2 transition ${
-                    selectedImage === index
-                      ? 'border-jumia-orange'
-                      : 'border-transparent hover:border-gray-300'
-                  }`}
-                >
-                  <div className="skeleton w-full h-full"></div>
-                </button>
-              ))}
-            </div>
+            <ImageGallery images={product.images} productName={product.name} />
           </div>
 
           {/* Product Info */}
@@ -393,48 +341,11 @@ Key Features:
             </div>
 
             {/* Reviews Section */}
-            <div className="bg-white rounded-lg shadow-md p-6">
-              <h2 className="text-2xl font-bold text-gray-900 mb-4">
-                Customer Reviews ({product.reviews.toLocaleString()})
-              </h2>
-              <div className="space-y-4">
-                {/* Sample Review */}
-                <div className="border-b border-gray-100 pb-4">
-                  <div className="flex items-start space-x-4">
-                    <div className="w-12 h-12 rounded-full bg-jumia-orange bg-opacity-10 flex items-center justify-center flex-shrink-0">
-                      <span className="text-jumia-orange font-bold">JD</span>
-                    </div>
-                    <div className="flex-1">
-                      <div className="flex items-center justify-between mb-2">
-                        <div>
-                          <h4 className="font-medium text-gray-900">John Doe</h4>
-                          <div className="flex items-center space-x-2">
-                            <div className="flex">
-                              {[...Array(5)].map((_, i) => (
-                                <svg
-                                  key={i}
-                                  className="w-4 h-4 text-jumia-orange"
-                                  fill="currentColor"
-                                  viewBox="0 0 24 24"
-                                >
-                                  <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
-                                </svg>
-                              ))}
-                            </div>
-                            <span className="text-xs text-jumia-gray">2 days ago</span>
-                          </div>
-                        </div>
-                      </div>
-                      <p className="text-gray-700">
-                        Excellent phone! The camera quality is outstanding and the battery lasts all day. Highly recommend!
-                      </p>
-                    </div>
-                  </div>
-                </div>
-                <button className="text-jumia-orange hover:text-jumia-orange-dark font-medium">
-                  View All Reviews →
-                </button>
-              </div>
+            <ReviewList reviews={reviews} />
+            
+            {/* Review Form */}
+            <div className="mt-6">
+              <ReviewForm productId={product.id} onSubmit={handleReviewSubmit} />
             </div>
           </div>
 

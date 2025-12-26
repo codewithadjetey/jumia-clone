@@ -1,7 +1,12 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { useWishlist } from '../context/WishlistContext';
+import { useToast } from '../context/ToastContext';
 
 const ProductCard = ({ product, showBuyNow = false }) => {
+  const { isInWishlist, toggleWishlist } = useWishlist();
+  const { showToast } = useToast();
+  
   const {
     id,
     name,
@@ -15,6 +20,16 @@ const ProductCard = ({ product, showBuyNow = false }) => {
     onAddToCart,
     onBuyNow,
   } = product;
+
+  const handleWishlistClick = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    toggleWishlist(product);
+    showToast(
+      isInWishlist(id) ? 'Removed from wishlist' : 'Added to wishlist',
+      'success'
+    );
+  };
 
   return (
     <div className="product-card bg-white rounded-lg shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden group min-w-[150px] md:min-w-0">
@@ -39,8 +54,15 @@ const ProductCard = ({ product, showBuyNow = false }) => {
             {badge.text}
           </span>
         ))}
-        <button className="absolute bottom-2 right-2 bg-white rounded-full p-2 shadow-md hover:bg-jumia-orange hover:text-white transition opacity-0 group-hover:opacity-100">
-          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <button
+          onClick={handleWishlistClick}
+          className={`absolute bottom-2 right-2 rounded-full p-2 shadow-md transition opacity-0 group-hover:opacity-100 ${
+            isInWishlist(id)
+              ? 'bg-jumia-orange text-white'
+              : 'bg-white hover:bg-jumia-orange hover:text-white'
+          }`}
+        >
+          <svg className="w-4 h-4" fill={isInWishlist(id) ? 'currentColor' : 'none'} stroke="currentColor" viewBox="0 0 24 24">
             <path
               strokeLinecap="round"
               strokeLinejoin="round"

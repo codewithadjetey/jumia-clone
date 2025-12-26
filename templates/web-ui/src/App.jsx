@@ -1,5 +1,8 @@
 import React, { useState } from 'react';
 import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
+import { ToastProvider } from './context/ToastContext';
+import { WishlistProvider } from './context/WishlistContext';
+import { RecentlyViewedProvider } from './context/RecentlyViewedContext';
 import Topbar from './components/Topbar';
 import Header from './components/Header';
 import Footer from './components/Footer';
@@ -19,6 +22,22 @@ import TrackOrder from './pages/TrackOrder';
 import Contact from './pages/Contact';
 import Cart from './components/Cart';
 import Checkout from './components/Checkout';
+import SearchResults from './pages/SearchResults';
+import Wishlist from './pages/Wishlist';
+import Compare from './pages/Compare';
+import OrderHistory from './pages/OrderHistory';
+import OrderDetails from './pages/OrderDetails';
+import AddressBook from './pages/AddressBook';
+import Brands from './pages/Brands';
+import BrandDetail from './pages/BrandDetail';
+import Help from './pages/Help';
+import About from './pages/About';
+import Careers from './pages/Careers';
+import Terms from './pages/Terms';
+import Privacy from './pages/Privacy';
+import Returns from './pages/Returns';
+import Delivery from './pages/Delivery';
+import Deals from './pages/Deals';
 
 // List of routes that should not show header/footer
 const authRoutes = ['/login', '/register', '/forgot-password', '/reset-password'];
@@ -51,6 +70,22 @@ function AppContent() {
           <Route path="/contact" element={<Contact />} errorElement={<Error />} />
           <Route path="/cart" element={<Cart />} errorElement={<Error />} />
           <Route path="/checkout" element={<Checkout />} errorElement={<Error />} />
+          <Route path="/search" element={<SearchResults />} errorElement={<Error />} />
+          <Route path="/wishlist" element={<Wishlist />} errorElement={<Error />} />
+          <Route path="/compare" element={<Compare />} errorElement={<Error />} />
+          <Route path="/orders" element={<OrderHistory />} errorElement={<Error />} />
+          <Route path="/order/:id" element={<OrderDetails />} errorElement={<Error />} />
+          <Route path="/addresses" element={<AddressBook />} errorElement={<Error />} />
+          <Route path="/brands" element={<Brands />} errorElement={<Error />} />
+          <Route path="/brand/:brandName" element={<BrandDetail />} errorElement={<Error />} />
+          <Route path="/help" element={<Help />} errorElement={<Error />} />
+          <Route path="/about" element={<About />} errorElement={<Error />} />
+          <Route path="/careers" element={<Careers />} errorElement={<Error />} />
+          <Route path="/terms" element={<Terms />} errorElement={<Error />} />
+          <Route path="/privacy" element={<Privacy />} errorElement={<Error />} />
+          <Route path="/returns" element={<Returns />} errorElement={<Error />} />
+          <Route path="/delivery" element={<Delivery />} errorElement={<Error />} />
+          <Route path="/deals" element={<Deals />} errorElement={<Error />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </main>
@@ -66,9 +101,15 @@ function AppContent() {
 
 function App() {
   return (
-    <Router>
-      <AppContent />
-    </Router>
+    <ToastProvider>
+      <WishlistProvider>
+        <RecentlyViewedProvider>
+          <Router>
+            <AppContent />
+          </Router>
+        </RecentlyViewedProvider>
+      </WishlistProvider>
+    </ToastProvider>
   );
 }
 
