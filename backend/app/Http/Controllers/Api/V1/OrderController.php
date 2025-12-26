@@ -107,9 +107,16 @@ class OrderController extends Controller
         $shipping = 10.00; // Fixed shipping
         $total = $subtotal + $tax + $shipping;
 
+        // Generate tracking number
+        $trackingNumber = 'TRK-' . strtoupper(Str::random(10));
+
+        // Calculate estimated delivery (3-5 business days)
+        $estimatedDelivery = now()->addDays(rand(3, 5))->format('Y-m-d');
+
         $order = Order::create([
             'user_id' => $request->user()->id,
             'order_number' => 'ORD-' . strtoupper(Str::random(10)),
+            'tracking_number' => $trackingNumber,
             'status' => 'pending',
             'subtotal' => $subtotal,
             'tax' => $tax,
@@ -119,6 +126,9 @@ class OrderController extends Controller
             'payment_method' => $validated['payment_method'] ?? 'cash_on_delivery',
             'shipping_address_id' => $validated['shipping_address_id'],
             'billing_address_id' => $validated['billing_address_id'],
+            'delivery_slot' => $validated['delivery_slot'] ?? null,
+            'order_notes' => $validated['order_notes'] ?? null,
+            'estimated_delivery' => $estimatedDelivery,
         ]);
 
         foreach ($cartItems as $cartItem) {
@@ -166,5 +176,62 @@ class OrderController extends Controller
         $order->update(['status' => 'cancelled']);
 
         return response()->json(['message' => 'Order cancelled successfully']);
+    }
+
+    /**
+     * @OA\Get(
+     *     path="/api/v1/orders/{id}/track",
+     *     summary="Track order",
+     *     tags={"Orders"},
+     *     security={{"sanctum":{}}},
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         required=true,
+     *         @OA\Schema(type="integer")
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Order tracking information"
+     *     )
+     * )
+     */
+    public function track(Request $request, $id): JsonResponse
+    {
+        $order = Order::with(['items.product', 'shippingAddress'])
+            ->where('user_id', $request->user()->id)
+            ->findOrFail($id);
+
+        $trackingInfo = [
+            'order_number' => $order->order_number,
+            'tracking_number' => $order->tracking_number,
+            'status' => $order->status,
+            'estimated_delivery' => $order->estimated_delivery,
+            'shipping_address' => $order->shippingAddress,
+            'timeline' => $this->getTrackingTimeline($order),
+        ];
+
+        return response()->json($trackingInfo);
+    }
+
+    private function getTrackingTimeline(Order $order): array
+    {
+        $timeline = [
+            ['status' => 'pending', 'label' => 'Order Placed', 'date' => $order->created_at],
+        ];
+
+        if ($order->status !== 'pending') {
+            $timeline[] = ['status' => 'processing', 'label' => 'Processing', 'date' => $order->updated_at];
+        }
+
+        if (in_array($order->status, ['shipped', 'delivered'])) {
+            $timeline[] = ['status' => 'shipped', 'label' => 'Shipped', 'date' => $order->updated_at];
+        }
+
+        if ($order->status === 'delivered') {
+            $timeline[] = ['status' => 'delivered', 'label' => 'Delivered', 'date' => $order->updated_at];
+        }
+
+        return $timeline;
     }
 }
