@@ -33,13 +33,36 @@ class ReviewController extends Controller
      *     )
      * )
      */
-    public function getProductReviews($productId): JsonResponse
+    public function getProductReviews(Request $request, $productId): JsonResponse
     {
-        $reviews = Review::with('user')
+        $query = Review::with('user')
             ->where('product_id', $productId)
-            ->where('is_approved', true)
-            ->latest()
-            ->paginate(20);
+            ->where('is_approved', true);
+
+        // Filter by rating
+        if ($request->has('rating')) {
+            $query->where('rating', '>=', $request->rating);
+        }
+
+        // Sorting
+        $sortBy = $request->get('sort_by', 'recent');
+        switch ($sortBy) {
+            case 'oldest':
+                $query->oldest();
+                break;
+            case 'highest':
+                $query->orderBy('rating', 'desc');
+                break;
+            case 'lowest':
+                $query->orderBy('rating', 'asc');
+                break;
+            case 'recent':
+            default:
+                $query->latest();
+                break;
+        }
+
+        $reviews = $query->paginate(20);
 
         return response()->json($reviews);
     }
@@ -73,6 +96,9 @@ class ReviewController extends Controller
             'user_id' => $request->user()->id,
             ...$validated,
         ]);
+
+        // Update product rating aggregation
+        $this->updateProductRating($review->product_id);
 
         return response()->json($review->load('user'), 201);
     }
@@ -114,6 +140,9 @@ class ReviewController extends Controller
 
         $review->update($validated);
 
+        // Update product rating aggregation
+        $this->updateProductRating($review->product_id);
+
         return response()->json($review->load('user'));
     }
 
@@ -137,10 +166,72 @@ class ReviewController extends Controller
      */
     public function destroy(Request $request, $id): JsonResponse
     {
-        Review::where('user_id', $request->user()->id)
-            ->findOrFail($id)
-            ->delete();
+        $review = Review::where('user_id', $request->user()->id)
+            ->findOrFail($id);
+        
+        $productId = $review->product_id;
+        $review->delete();
+
+        // Update product rating aggregation
+        $this->updateProductRating($productId);
 
         return response()->json(['message' => 'Review deleted']);
+    }
+
+    /**
+     * @OA\Post(
+     *     path="/api/v1/reviews/{id}/helpful",
+     *     summary="Mark review as helpful",
+     *     tags={"Reviews"},
+     *     security={{"sanctum":{}}},
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         required=true,
+     *         @OA\Schema(type="integer")
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Review marked as helpful"
+     *     )
+     * )
+     */
+    public function markHelpful(Request $request, $id): JsonResponse
+    {
+        $review = Review::findOrFail($id);
+
+        $vote = \App\Models\ReviewHelpfulVote::firstOrCreate([
+            'review_id' => $review->id,
+            'user_id' => $request->user()->id,
+        ]);
+
+        if ($vote->wasRecentlyCreated) {
+            $review->increment('helpful_count');
+        }
+
+        return response()->json([
+            'message' => 'Review marked as helpful',
+            'helpful_count' => $review->fresh()->helpful_count,
+        ]);
+    }
+
+    private function updateProductRating($productId): void
+    {
+        $product = \App\Models\Product::find($productId);
+        if (!$product) {
+            return;
+        }
+
+        $approvedReviews = Review::where('product_id', $productId)
+            ->where('is_approved', true)
+            ->get();
+
+        $averageRating = $approvedReviews->avg('rating') ?? 0;
+        $reviewCount = $approvedReviews->count();
+
+        $product->update([
+            'average_rating' => round($averageRating, 2),
+            'review_count' => $reviewCount,
+        ]);
     }
 }
