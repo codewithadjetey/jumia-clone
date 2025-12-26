@@ -166,4 +166,75 @@ class CartController extends Controller
 
         return response()->json(['message' => 'Cart cleared']);
     }
+
+    /**
+     * @OA\Post(
+     *     path="/api/v1/cart/apply-coupon",
+     *     summary="Apply coupon to cart",
+     *     tags={"Cart"},
+     *     security={{"sanctum":{}}},
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(
+     *             required={"code"},
+     *             @OA\Property(property="code", type="string", example="SAVE20")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Coupon applied successfully"
+     *     )
+     * )
+     */
+    public function applyCoupon(Request $request): JsonResponse
+    {
+        $validated = $request->validate([
+            'code' => 'required|string',
+        ]);
+
+        $cartItems = CartItem::with('product')
+            ->where('user_id', $request->user()->id)
+            ->get();
+
+        $subtotal = $cartItems->sum('total');
+
+        $coupon = \App\Models\Coupon::where('code', $validated['code'])->first();
+
+        if (!$coupon || !$coupon->isValid()) {
+            return response()->json(['message' => 'Invalid or expired coupon'], 400);
+        }
+
+        if ($coupon->min_purchase && $subtotal < $coupon->min_purchase) {
+            return response()->json([
+                'message' => "Minimum order amount of {$coupon->min_purchase} required",
+            ], 400);
+        }
+
+        $discount = $coupon->calculateDiscount($subtotal);
+
+        return response()->json([
+            'message' => 'Coupon applied successfully',
+            'coupon' => $coupon,
+            'discount' => $discount,
+            'subtotal' => $subtotal,
+            'total' => $subtotal - $discount,
+        ]);
+    }
+
+    /**
+     * @OA\Delete(
+     *     path="/api/v1/cart/remove-coupon",
+     *     summary="Remove coupon from cart",
+     *     tags={"Cart"},
+     *     security={{"sanctum":{}}},
+     *     @OA\Response(
+     *         response=200,
+     *         description="Coupon removed"
+     *     )
+     * )
+     */
+    public function removeCoupon(Request $request): JsonResponse
+    {
+        return response()->json(['message' => 'Coupon removed']);
+    }
 }
