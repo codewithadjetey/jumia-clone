@@ -8,6 +8,7 @@ use App\Http\Controllers\Api\V1\AddressController;
 use App\Http\Controllers\Api\V1\ReviewController;
 use App\Http\Controllers\Api\V1\WishlistController;
 use App\Http\Controllers\Api\V1\CouponController;
+use App\Http\Controllers\Api\V1\ProductController;
 
 /*
 |--------------------------------------------------------------------------
@@ -30,12 +31,15 @@ Route::prefix('v1')->middleware('auth:sanctum')->group(function () {
     Route::put('/cart/update/{itemId}', [CartController::class, 'update']);
     Route::delete('/cart/remove/{itemId}', [CartController::class, 'remove']);
     Route::delete('/cart/clear', [CartController::class, 'clear']);
+    Route::post('/cart/apply-coupon', [CartController::class, 'applyCoupon']);
+    Route::delete('/cart/remove-coupon', [CartController::class, 'removeCoupon']);
 
     // Order endpoints
     Route::get('/orders', [OrderController::class, 'index']);
     Route::get('/orders/{id}', [OrderController::class, 'show']);
     Route::post('/orders/create', [OrderController::class, 'create']);
     Route::post('/orders/{id}/cancel', [OrderController::class, 'cancel']);
+    Route::get('/orders/{id}/track', [OrderController::class, 'track']);
 
     // Address endpoints
     Route::get('/addresses', [AddressController::class, 'index']);
@@ -48,6 +52,7 @@ Route::prefix('v1')->middleware('auth:sanctum')->group(function () {
     Route::post('/reviews', [ReviewController::class, 'store']);
     Route::put('/reviews/{id}', [ReviewController::class, 'update']);
     Route::delete('/reviews/{id}', [ReviewController::class, 'destroy']);
+    Route::post('/reviews/{id}/helpful', [ReviewController::class, 'markHelpful']);
 
     // Wishlist endpoints
     Route::get('/wishlist', [WishlistController::class, 'index']);
@@ -57,5 +62,9 @@ Route::prefix('v1')->middleware('auth:sanctum')->group(function () {
     // Coupon endpoints
     Route::post('/coupons/validate', [CouponController::class, 'validate']);
     Route::get('/coupons/available', [CouponController::class, 'available']);
+
+    // Product endpoints (authenticated)
+    Route::post('/products/{id}/view', [ProductController::class, 'trackView']);
+    Route::get('/products/recently-viewed', [ProductController::class, 'recentlyViewed']);
 });
 
