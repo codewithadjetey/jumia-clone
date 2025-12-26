@@ -7,7 +7,7 @@
     },
     "servers": [
         {
-            "url": "http://codewithadjetey.jumia",
+            "url": "http://jumia-clone.org",
             "description": "API Server"
         }
     ],
@@ -1589,6 +1589,72 @@
                 }
             }
         },
+        "/api/v1/auth/google": {
+            "post": {
+                "tags": [
+                    "Authentication"
+                ],
+                "summary": "Login/Register with Google",
+                "operationId": "8e74c1408a7549abc18b4e36cf7048c6",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "access_token"
+                                ],
+                                "properties": {
+                                    "access_token": {
+                                        "type": "string",
+                                        "example": "google-access-token"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Login successful"
+                    }
+                }
+            }
+        },
+        "/api/v1/auth/facebook": {
+            "post": {
+                "tags": [
+                    "Authentication"
+                ],
+                "summary": "Login/Register with Facebook",
+                "operationId": "db995e4237075962e7d619a9ce3f8770",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "access_token"
+                                ],
+                                "properties": {
+                                    "access_token": {
+                                        "type": "string",
+                                        "example": "facebook-access-token"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Login successful"
+                    }
+                }
+            }
+        },
         "/api/v1/brands": {
             "get": {
                 "tags": [
@@ -1804,6 +1870,63 @@
                 ]
             }
         },
+        "/api/v1/cart/apply-coupon": {
+            "post": {
+                "tags": [
+                    "Cart"
+                ],
+                "summary": "Apply coupon to cart",
+                "operationId": "e410a019d2b8d036731cf6b163174a9f",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "code"
+                                ],
+                                "properties": {
+                                    "code": {
+                                        "type": "string",
+                                        "example": "SAVE20"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Coupon applied successfully"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/cart/remove-coupon": {
+            "delete": {
+                "tags": [
+                    "Cart"
+                ],
+                "summary": "Remove coupon from cart",
+                "operationId": "95e78cea5885be1e4489843836d0cf5c",
+                "responses": {
+                    "200": {
+                        "description": "Coupon removed"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
         "/api/v1/categories": {
             "get": {
                 "tags": [
@@ -1902,6 +2025,74 @@
                         "sanctum": []
                     }
                 ]
+            }
+        },
+        "/api/v1/newsletter/subscribe": {
+            "post": {
+                "tags": [
+                    "Newsletter"
+                ],
+                "summary": "Subscribe to newsletter",
+                "operationId": "0b53607c0cdfaff7b3912e778f0811e1",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "email"
+                                ],
+                                "properties": {
+                                    "email": {
+                                        "type": "string",
+                                        "format": "email",
+                                        "example": "user@example.com"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successfully subscribed"
+                    }
+                }
+            }
+        },
+        "/api/v1/newsletter/unsubscribe": {
+            "post": {
+                "tags": [
+                    "Newsletter"
+                ],
+                "summary": "Unsubscribe from newsletter",
+                "operationId": "c40f4f978fcda87a584d2531b7a10e88",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "email"
+                                ],
+                                "properties": {
+                                    "email": {
+                                        "type": "string",
+                                        "format": "email",
+                                        "example": "user@example.com"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successfully unsubscribed"
+                    }
+                }
             }
         },
         "/api/v1/orders": {
@@ -2019,6 +2210,35 @@
                 "responses": {
                     "200": {
                         "description": "Order cancelled successfully"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/orders/{id}/track": {
+            "get": {
+                "tags": [
+                    "Orders"
+                ],
+                "summary": "Track order",
+                "operationId": "3769c556060850e5f123b783c74cf2bb",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Order tracking information"
                     }
                 },
                 "security": [
@@ -2155,6 +2375,146 @@
                         "description": "Products in category"
                     }
                 }
+            }
+        },
+        "/api/v1/products/autocomplete": {
+            "get": {
+                "tags": [
+                    "Products"
+                ],
+                "summary": "Get product autocomplete suggestions",
+                "operationId": "ed8f4b0cdeb6760bec1b24e80b85b396",
+                "parameters": [
+                    {
+                        "name": "q",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Product suggestions"
+                    }
+                }
+            }
+        },
+        "/api/v1/products/flash-sales": {
+            "get": {
+                "tags": [
+                    "Products"
+                ],
+                "summary": "Get flash sale products",
+                "operationId": "7a94269f3ee4f06b5076b138cfe97851",
+                "responses": {
+                    "200": {
+                        "description": "List of flash sale products"
+                    }
+                }
+            }
+        },
+        "/api/v1/products/daily-deals": {
+            "get": {
+                "tags": [
+                    "Products"
+                ],
+                "summary": "Get daily deals",
+                "operationId": "6e8e86448416544a99d77bde2a7dc6ec",
+                "responses": {
+                    "200": {
+                        "description": "List of daily deal products"
+                    }
+                }
+            }
+        },
+        "/api/v1/products/compare": {
+            "post": {
+                "tags": [
+                    "Products"
+                ],
+                "summary": "Compare products",
+                "operationId": "404b6e0d28e95abff6f8967415a970d8",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "product_ids"
+                                ],
+                                "properties": {
+                                    "product_ids": {
+                                        "type": "array",
+                                        "items": {
+                                            "type": "integer"
+                                        },
+                                        "example": [
+                                            1,
+                                            2,
+                                            3
+                                        ]
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Product comparison data"
+                    }
+                }
+            }
+        },
+        "/api/v1/products/{id}/view": {
+            "post": {
+                "tags": [
+                    "Products"
+                ],
+                "summary": "Track product view",
+                "operationId": "ade66b3ca10024ae62e00932f432a46e",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "View tracked"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/products/recently-viewed": {
+            "get": {
+                "tags": [
+                    "Products"
+                ],
+                "summary": "Get recently viewed products",
+                "operationId": "c37a1b6af5c2232caa85d95a672b8608",
+                "responses": {
+                    "200": {
+                        "description": "List of recently viewed products"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
             }
         },
         "/api/v1/reviews/product/{productId}": {
@@ -2297,6 +2657,35 @@
                 "responses": {
                     "200": {
                         "description": "Review deleted successfully"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/reviews/{id}/helpful": {
+            "post": {
+                "tags": [
+                    "Reviews"
+                ],
+                "summary": "Mark review as helpful",
+                "operationId": "a65d8c95239bd58498d90a8a65f321bd",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Review marked as helpful"
                     }
                 },
                 "security": [
@@ -2533,6 +2922,10 @@
         {
             "name": "Coupons",
             "description": "Coupon management endpoints"
+        },
+        {
+            "name": "Newsletter",
+            "description": "Newsletter subscription endpoints"
         },
         {
             "name": "Orders",
