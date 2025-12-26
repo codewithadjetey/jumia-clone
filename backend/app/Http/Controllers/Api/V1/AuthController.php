@@ -263,4 +263,90 @@ class AuthController extends Controller
             'message' => 'Unable to reset password',
         ], 400);
     }
+
+    /**
+     * @OA\Post(
+     *     path="/api/v1/auth/google",
+     *     summary="Login/Register with Google",
+     *     tags={"Authentication"},
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(
+     *             required={"access_token"},
+     *             @OA\Property(property="access_token", type="string", example="google-access-token")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Login successful"
+     *     )
+     * )
+     */
+    public function google(Request $request): JsonResponse
+    {
+        $request->validate([
+            'access_token' => 'required|string',
+        ]);
+
+        // Note: This requires Laravel Socialite package
+        // Install with: composer require laravel/socialite
+        // Configure in config/services.php
+        
+        try {
+            // For now, return a placeholder response
+            // In production, use Socialite to verify the token and get user info
+            return response()->json([
+                'message' => 'Google authentication requires Laravel Socialite package',
+                'note' => 'Install: composer require laravel/socialite',
+            ], 501);
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => 'Authentication failed',
+                'error' => $e->getMessage(),
+            ], 400);
+        }
+    }
+
+    /**
+     * @OA\Post(
+     *     path="/api/v1/auth/facebook",
+     *     summary="Login/Register with Facebook",
+     *     tags={"Authentication"},
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(
+     *             required={"access_token"},
+     *             @OA\Property(property="access_token", type="string", example="facebook-access-token")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Login successful"
+     *     )
+     * )
+     */
+    public function facebook(Request $request): JsonResponse
+    {
+        $request->validate([
+            'access_token' => 'required|string',
+        ]);
+
+        // Note: This requires Laravel Socialite package
+        // Install with: composer require laravel/socialite
+        // Configure in config/services.php
+        
+        try {
+            // For now, return a placeholder response
+            // In production, use Socialite to verify the token and get user info
+            return response()->json([
+                'message' => 'Facebook authentication requires Laravel Socialite package',
+                'note' => 'Install: composer require laravel/socialite',
+            ], 501);
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => 'Authentication failed',
+                'error' => $e->getMessage(),
+            ], 400);
+        }
+    }
 }
