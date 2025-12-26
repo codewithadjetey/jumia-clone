@@ -11,6 +11,7 @@ class Order extends Model
     protected $fillable = [
         'user_id',
         'order_number',
+        'tracking_number',
         'status',
         'subtotal',
         'tax',
@@ -20,6 +21,9 @@ class Order extends Model
         'payment_method',
         'shipping_address_id',
         'billing_address_id',
+        'delivery_slot',
+        'order_notes',
+        'estimated_delivery',
     ];
 
     protected $casts = [
@@ -27,6 +31,7 @@ class Order extends Model
         'tax' => 'decimal:2',
         'shipping' => 'decimal:2',
         'total' => 'decimal:2',
+        'estimated_delivery' => 'date',
     ];
 
     public function user(): BelongsTo
