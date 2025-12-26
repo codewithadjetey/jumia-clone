@@ -16,6 +16,7 @@ class CreateReviewRequest extends FormRequest
         return [
             'product_id' => 'required|exists:products,id',
             'rating' => 'required|integer|min:1|max:5',
+            'title' => 'nullable|string|max:255',
             'comment' => 'nullable|string|max:1000',
         ];
     }

@@ -17,6 +17,9 @@ class CreateOrderRequest extends FormRequest
             'shipping_address_id' => 'required|exists:addresses,id',
             'billing_address_id' => 'required|exists:addresses,id',
             'payment_method' => 'nullable|string',
+            'delivery_slot' => 'nullable|string|in:morning,afternoon,evening',
+            'order_notes' => 'nullable|string|max:1000',
+            'coupon_code' => 'nullable|string',
         ];
     }
 }
